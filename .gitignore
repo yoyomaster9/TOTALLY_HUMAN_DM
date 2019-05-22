@@ -1,2 +1,4 @@
 # Don't push token into Github
 DiscordToken
+
+__pycache__

@@ -7,7 +7,7 @@ Example of format:
                 description="Answers a yes/no question.",
                 brief="Answers from the beyond.",
                 aliases=['eight_ball', 'eightball', '8-ball'],
-                pass_context=True)
+                pass_context=True) # pass context to get the actual message - not necessary
 async def eightball(context):
     await client.say(message)
 
@@ -49,6 +49,7 @@ import random
 import asyncio
 import aiohttp
 import json
+import DM
 from discord import Game
 from discord.ext.commands import Bot
 
@@ -60,6 +61,14 @@ TokenFile.close()
 
 client = Bot(command_prefix=BOT_PREFIX)
 
+@client.command(name = 'roll',
+                description = 'Will roll any number of dice - Write in #d# + ... format',
+                brief = 'Rolls any number of dice',
+                pass_context = True)
+async def roll(arg):
+    l = DM.roll(arg)
+    msg = 'YOU ROLLED THE NUMBERS {Rolls}, YIELDING A SUM OF {Sum}!'.format(Rolls = l, Sum = sum(l))
+    await client.say(msg)
 
 @client.event
 async def on_ready():
