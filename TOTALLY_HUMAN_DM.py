@@ -63,8 +63,7 @@ client = Bot(command_prefix=BOT_PREFIX)
 
 @client.command(name = 'roll',
                 description = 'Will roll any number of dice - Write in #d# + ... format',
-                brief = 'Rolls any number of dice',
-                pass_context = True)
+                brief = 'Rolls any number of dice')
 async def roll(arg):
     l = DM.roll(arg)
     msg = 'YOU ROLLED THE NUMBERS {Rolls}, YIELDING A SUM OF {Sum}!'.format(Rolls = l, Sum = sum(l))

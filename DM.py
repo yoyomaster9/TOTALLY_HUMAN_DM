@@ -4,7 +4,6 @@ def roll(s): # Simulates rolls of the form #d#+#d#..
     l = []
     s = s.lower()
     for i in s.split('+'):
-        print(i)
         try:
             if i[0] == 'd':
                 i = '1' + i
