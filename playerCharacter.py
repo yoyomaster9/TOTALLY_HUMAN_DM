@@ -1,5 +1,5 @@
 import DM
-
+import random
 import json
 import os
 
@@ -10,28 +10,39 @@ PlayerDataDirectory = 'PlayerData/'
 if not os.path.exists(PlayerDataDirectory):
     os.makedirs(PlayerDataDirectory)
 
-class User:
-    def __init__(self, playerName,**kwargs):
-
-        self.playerName = playerName
-        self.rollStats()
-
-        # In case extra variables are stored
+class Player:
+    def __init__(self, playerName, statmethod = 'standard', wallet = 0, **kwargs):
         self.__dict__.update(kwargs)
+        self.wallet = wallet
+        self.playerName = playerName
+        if not hasattr(self, 'baseStats'):
+            self.rollStats(statmethod)
         self.save()
 
     def save(self):
-        dir = PlayerDataDirectory + self.nick
+        dir = PlayerDataDirectory + self.playerName
         with open(dir, 'w') as file:
             data = vars(self)
             json.dump(data, file)
 
+    def rollStats(self, statmethod):
+        abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
+        if statmethod == 'standard':
+            scores = [15, 14, 13, 12, 10, 8]
+            random.shuffle(scores)
+            self.baseStats = dict(zip(abilities, scores))
+        elif statmethod == 'random':
+            self.baseStats = dict()
+            for a in abilities:
+                rolls = [random.randint(1, 6) for x in range(4)]
+                rolls.sort()
+                self.baseStats[a] = sum(rolls[1:])
 
 def loadPlayer(nick):
     dir = PlayerDataDirectory + nick
     try:
         with open(dir, 'r') as file:
             dict = json.load(file)
-            return User(**dict)
+            return Player(**dict)
     except FileNotFoundError:
         print('File Error!!')

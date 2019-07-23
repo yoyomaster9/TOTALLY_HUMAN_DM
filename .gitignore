@@ -6,3 +6,6 @@ __pycache__
 
 # Making notes for future additions
 Notes.txt
+
+# Don't sync any player data
+PlayerData
