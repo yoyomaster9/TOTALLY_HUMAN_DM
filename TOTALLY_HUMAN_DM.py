@@ -5,14 +5,21 @@ import random
 import asyncio
 import aiohttp
 import json
+import sys
 import DM
 import discord
 from discord.ext import commands
 
 BOT_PREFIX = ('!')
 
-# Adjust if not running beta
-with open('discord_beta.token', 'r') as file:
+print(sys.argv)
+# run python file with beta after
+if sys.argv[1].lower() == 'beta':
+    filepath = 'discord_beta.token'
+else:
+    filepath = 'discord.token'
+
+with open(filepath, 'r') as file:
     TOKEN = file.read()
 
 client = commands.Bot(command_prefix=BOT_PREFIX)
