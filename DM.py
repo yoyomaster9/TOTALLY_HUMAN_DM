@@ -16,7 +16,3 @@ def roll(s): # Simulates rolls of the form #d#+#d#..
         else:
             l.append(int(i))
     return l
-
-#
-# class Player():
-#     def __init__(self):

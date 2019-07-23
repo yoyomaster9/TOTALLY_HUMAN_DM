@@ -1,4 +1,8 @@
 # Don't push token into Github
-DiscordToken
+*.token
 
+# Created whenever python files run
 __pycache__
+
+# Making notes for future additions
+Notes.txt
