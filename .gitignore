@@ -1,5 +1,6 @@
 # Don't push token into Github
 *.token
+tokens.py
 
 # Created whenever python files run
 __pycache__

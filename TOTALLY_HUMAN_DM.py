@@ -1,25 +1,14 @@
-#!/usr/bin/python3
-# Only run with Python 3.6
-
-import random
-import asyncio
-import aiohttp
-import json
-import sys
-import DM
+import random, asyncio, aiohttp, json, sys, os
 import discord
 from discord.ext import commands
+import tokens
+import DM
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 BOT_PREFIX = ('!')
-
-# run python file with beta after
-if sys.argv[1].lower() == 'beta':
-    filepath = 'discord_beta.token'
-else:
-    filepath = 'discord.token'
-
-with open(filepath, 'r') as file:
-    TOKEN = file.read()
 
 client = commands.Bot(command_prefix=BOT_PREFIX)
 
@@ -40,15 +29,18 @@ async def on_command_error(ctx, error):
                 help = '''Example: 2d6 + 1d4 + 3 will simulate 2 six-sided dice, 1 four-sided die, and add 3 at the end.''',
                 brief = 'Rolls any number of dice',
                 aliases = ['r'])
-async def roll(ctx, *arg):
-    if not arg:
+async def roll(ctx, msg):
+    print(msg)
+    if not msg:
         await ctx.send('BZZT YOU NEED TO SPECIFY THE ROLL!')
     else:
-        l = DM.roll(''.join(arg))
-        msg = 'YOU ROLLED THE NUMBERS {Rolls}, YIELDING A SUM OF {Sum}!'.format(Rolls = l, Sum = sum(l))
-        await ctx.send(msg)
-
-
+        try:
+            l = DM.roll(msg)
+            msg = 'YOU ROLLED THE NUMBERS {Rolls}, YIELDING A SUM OF {Sum}!'.format(Rolls = l, Sum = sum(l))
+            await ctx.send(msg)
+        except:
+            await ctx.send('I COULD NOT UNDERSTAND YOUR INPUT KRRT!!')
+            
 @commands.has_permissions(administrator=True)
 @client.command(brief = 'Logs bot out of all servers [ADMIN ONLY]',
                 description = 'Logs bot out of all servers [ADMIN ONLY]')
@@ -61,4 +53,6 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(name='DND WITH OTHER HUMANS'))
     print('Logged in as ' + client.user.name)
     print('---------------------')
-client.run(TOKEN)
+
+
+client.run(tokens.beta)
