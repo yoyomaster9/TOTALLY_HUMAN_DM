@@ -2,4 +2,4 @@
 Discord bot for DnD group
 
 # Prerequisites
-DiscordToken - File that contains discord token
+tokens.py - Has beta and release keys included.
