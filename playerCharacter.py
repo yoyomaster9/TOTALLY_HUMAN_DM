@@ -38,6 +38,27 @@ class Player:
                 rolls.sort()
                 self.baseStats[a] = sum(rolls[1:])
 
+    # functions to determine stats based on items and base stats
+    # returns the modifiers, not ability scores
+    def str(self):
+        pass
+    def dex(self):
+        pass
+    def con(self):
+        pass
+    def int(self):
+        pass
+    def wis(self):
+        pass
+    def cha(self):
+        pass
+
+class Item:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+        # Needs - rarity, flavor text, ability mods,
+        # will load from file
+
 def loadPlayer(nick):
     dir = PlayerDataDirectory + nick
     try:
