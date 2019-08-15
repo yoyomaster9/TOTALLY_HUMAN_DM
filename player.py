@@ -12,15 +12,32 @@ if not os.path.exists(PlayerDataDirectory):
 
 class Player:
     def __init__(self, playerID, statmethod = 'standard', wallet = 0, **kwargs):
-        self.__dict__.update(kwargs)
-        self.wallet = wallet
-        self.playerName = playerName
-        if not hasattr(self, 'baseStats'):
-            self.rollStats(statmethod)
-        self.save()
+        if os.path.exists(PlayerDataDirectory + str(playerID)):
+            self.loadPlayer(playerID)
+        else:
+            kwargs['playerID'] = playerID
+            kwargs['statmethod'] = statmethod
+            kwargs['wallet'] = wallet
+            self.newPlayer(kwargs)
+
+    def newPlayer(self, kwargs):
+            self.__dict__.update(kwargs)
+            if not hasattr(self, 'baseStats'):
+                self.rollStats(self.statmethod)
+            self.save()
+
+    def loadPlayer(self, playerID):
+        dir = PlayerDataDirectory + str(playerID)
+        try:
+            with open(dir, 'r') as file:
+                dict = json.load(file)
+                return self.newPlayer(**dict)
+        except FileNotFoundError:
+            print('File Error!!')
+
 
     def save(self):
-        dir = PlayerDataDirectory + self.playerID
+        dir = PlayerDataDirectory + str(self.playerID)
         with open(dir, 'w') as file:
             data = vars(self)
             json.dump(data, file)
@@ -52,12 +69,3 @@ class Player:
         pass
     def cha(self):
         pass
-
-def loadPlayer(playerID):
-    dir = PlayerDataDirectory + playerID
-    try:
-        with open(dir, 'r') as file:
-            dict = json.load(file)
-            return Player(**dict)
-    except FileNotFoundError:
-        print('File Error!!')
