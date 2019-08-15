@@ -11,7 +11,7 @@ if not os.path.exists(PlayerDataDirectory):
     os.makedirs(PlayerDataDirectory)
 
 class Player:
-    def __init__(self, playerName, statmethod = 'standard', wallet = 0, **kwargs):
+    def __init__(self, playerID, statmethod = 'standard', wallet = 0, **kwargs):
         self.__dict__.update(kwargs)
         self.wallet = wallet
         self.playerName = playerName
@@ -20,7 +20,7 @@ class Player:
         self.save()
 
     def save(self):
-        dir = PlayerDataDirectory + self.playerName
+        dir = PlayerDataDirectory + self.playerID
         with open(dir, 'w') as file:
             data = vars(self)
             json.dump(data, file)
@@ -53,14 +53,8 @@ class Player:
     def cha(self):
         pass
 
-class Item:
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-        # Needs - rarity, flavor text, ability mods,
-        # will load from file
-
-def loadPlayer(nick):
-    dir = PlayerDataDirectory + nick
+def loadPlayer(playerID):
+    dir = PlayerDataDirectory + playerID
     try:
         with open(dir, 'r') as file:
             dict = json.load(file)

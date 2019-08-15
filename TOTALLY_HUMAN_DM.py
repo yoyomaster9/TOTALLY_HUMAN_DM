@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 import tokens
 import DM
+import player
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
@@ -40,7 +41,7 @@ async def roll(ctx, msg):
             await ctx.send(msg)
         except:
             await ctx.send('I COULD NOT UNDERSTAND YOUR INPUT KRRT!!')
-            
+
 @commands.has_permissions(administrator=True)
 @client.command(brief = 'Logs bot out of all servers [ADMIN ONLY]',
                 description = 'Logs bot out of all servers [ADMIN ONLY]')
