@@ -28,13 +28,9 @@ class Player:
 
     def loadPlayer(self, playerID):
         dir = PlayerDataDirectory + str(playerID)
-        try:
-            with open(dir, 'r') as file:
-                dict = json.load(file)
-                return self.newPlayer(**dict)
-        except FileNotFoundError:
-            print('File Error!!')
-
+        with open(dir, 'r') as file:
+            dict = json.load(file)
+            self.__dict__.update(dict)
 
     def save(self):
         dir = PlayerDataDirectory + str(self.playerID)
