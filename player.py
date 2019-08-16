@@ -11,10 +11,11 @@ if not os.path.exists(PlayerDataDirectory):
     os.makedirs(PlayerDataDirectory)
 
 class Player:
-    def __init__(self, playerID, statmethod = 'standard', wallet = 0, **kwargs):
+    def __init__(self, playerID, playerNick, statmethod = 'standard', wallet = 0, **kwargs):
         if os.path.exists(PlayerDataDirectory + str(playerID)):
             self.loadPlayer(playerID)
         else:
+            kwargs['playerNick'] = playerNick
             kwargs['playerID'] = playerID
             kwargs['statmethod'] = statmethod
             kwargs['wallet'] = wallet
