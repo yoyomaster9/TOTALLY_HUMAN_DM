@@ -7,3 +7,6 @@ class Item:
         self.__dict__.update(kwargs)
         # Needs - rarity, flavor text, ability mods,
         # will load from file
+
+    def loadItem(self):
+        pass

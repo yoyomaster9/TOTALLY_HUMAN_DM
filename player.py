@@ -15,24 +15,20 @@ class Player:
         # author is discord ctx.user
         self.playerID = user.id
         self.playerName = user.name
+
         if os.path.exists(PlayerDataDirectory + str(self.playerID)):
-            self.loadPlayer(self.playerID)
+            dir = PlayerDataDirectory + str(self.playerID)
+            with open(dir, 'r') as file:
+                dict = json.load(file)
+                self.__dict__.update(dict)
         else:
-            kwargs['statmethod'] = statmethod
-            kwargs['wallet'] = wallet
-            self.newPlayer(kwargs)
-
-    def newPlayer(self, kwargs):
             self.__dict__.update(kwargs)
-            if not hasattr(self, 'baseStats'):
-                self.rollStats(self.statmethod)
+            self.statmethod = statmethod
+            self.wallet = wallet
+            self.equipped = []
+            self.items = []
+            self.rollStats(self.statmethod)
             self.save()
-
-    def loadPlayer(self, playerID):
-        dir = PlayerDataDirectory + str(playerID)
-        with open(dir, 'r') as file:
-            dict = json.load(file)
-            self.__dict__.update(dict)
 
     def save(self):
         dir = PlayerDataDirectory + str(self.playerID)
@@ -56,14 +52,32 @@ class Player:
     # functions to determine stats based on items and base stats
     # returns the modifiers, not ability scores
     def str(self):
-        pass
+        x = self.baseStats['str']//2 - 5
+        for item in self.equipped:
+            x += item.str
+        return x
     def dex(self):
-        pass
+        x = self.baseStats['dex']//2 - 5
+        for item in self.equipped:
+            x += item.dex
+        return x
     def con(self):
-        pass
+        x = self.baseStats['con']//2 - 5
+        for item in self.equipped:
+            x += item.con
+        return x
     def int(self):
-        pass
+        x = self.baseStats['int']//2 - 5
+        for item in self.equipped:
+            x += item.int
+        return x
     def wis(self):
-        pass
+        x = self.baseStats['wis']//2 - 5
+        for item in self.equipped:
+            x += item.wis
+        return x
     def cha(self):
-        pass
+        x = self.baseStats['cha']//2 - 5
+        for item in self.equipped:
+            x += item.cha
+        return x

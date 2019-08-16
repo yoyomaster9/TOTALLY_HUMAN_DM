@@ -49,6 +49,14 @@ async def ping(ctx):
     p = player.Player(ctx.author)
     print(p.__dict__)
 
+@client.command()
+async def stats(ctx):
+    p = player.Player(ctx.author)
+    s = 'Stat - score - mod'
+    for x in ['str', 'dex', 'con', 'int', 'wis', 'cha']:
+        s = s + '\n {}:  {}  ({})'.format(x, p.baseStats[x], eval('p.' + x + '()'))
+    await ctx.send(s)
+
 @commands.has_permissions(administrator=True)
 @client.command(brief = 'Logs bot out of all servers [ADMIN ONLY]',
                 description = 'Logs bot out of all servers [ADMIN ONLY]')
