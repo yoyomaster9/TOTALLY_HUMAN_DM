@@ -42,6 +42,13 @@ async def roll(ctx, msg):
         except:
             await ctx.send('I COULD NOT UNDERSTAND YOUR INPUT KRRT!!')
 
+@client.command()
+async def ping(ctx):
+    print(ctx)
+    print(ctx.author)
+    p = player.Player(ctx.author)
+    print(p.__dict__)
+
 @commands.has_permissions(administrator=True)
 @client.command(brief = 'Logs bot out of all servers [ADMIN ONLY]',
                 description = 'Logs bot out of all servers [ADMIN ONLY]')
