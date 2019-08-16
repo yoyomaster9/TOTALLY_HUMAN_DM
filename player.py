@@ -10,25 +10,37 @@ PlayerDataDirectory = 'PlayerData/'
 if not os.path.exists(PlayerDataDirectory):
     os.makedirs(PlayerDataDirectory)
 
+class PlayerNotFoundError(Exception):
+    pass
+
 class Player:
-    def __init__(self, user, statmethod = 'standard', wallet = 0, **kwargs):
-        # author is discord ctx.user
+    # def __init__(self, user, statmethod = 'standard', wallet = 0, **kwargs):
+    #     # author is discord ctx.user
+    #     self.playerID = user.id
+    #     self.playerName = user.name
+    #
+    #     if os.path.exists(PlayerDataDirectory + str(self.playerID)):
+    #         dir = PlayerDataDirectory + str(self.playerID)
+    #         with open(dir, 'r') as file:
+    #             dict = json.load(file)
+    #             self.__dict__.update(dict)
+    #     else:
+    #         self.__dict__.update(kwargs)
+    #         self.statmethod = statmethod
+    #         self.wallet = wallet
+    #         self.equipped = []
+    #         self.items = []
+    #         self.rollStats(self.statmethod)
+    #         self.save()
+
+    def __init__(self, user, **kwargs):
         self.playerID = user.id
         self.playerName = user.name
 
-        if os.path.exists(PlayerDataDirectory + str(self.playerID)):
-            dir = PlayerDataDirectory + str(self.playerID)
-            with open(dir, 'r') as file:
-                dict = json.load(file)
-                self.__dict__.update(dict)
-        else:
-            self.__dict__.update(kwargs)
-            self.statmethod = statmethod
-            self.wallet = wallet
-            self.equipped = []
-            self.items = []
-            self.rollStats(self.statmethod)
-            self.save()
+        dir = PlayerDataDirectory + str(self.playerID)
+        with open(dir, 'r') as file:
+            dict = json.load(file)
+            self.__dict__.update(dict)
 
     def save(self):
         dir = PlayerDataDirectory + str(self.playerID)

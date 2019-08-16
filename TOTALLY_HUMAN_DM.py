@@ -18,12 +18,21 @@ async def on_message(message):
     # We do not want the bot to reply to itself
     if message.author == client.user:
         return
+
+    # Check if player is registered
+    try:
+        player.Player(message.author):
+
     await client.process_commands(message)
 
 @client.event
 async def on_command_error(ctx, error):
     print(error)
     await ctx.send('BZZT ERROR ERROR! I CANNOT DO THAT!!')
+
+    if error == player.PlayerNotFoundError:
+        await ctx.send('BZZT YOU NEED TO REGISTER A CHARACTER!')
+
 
 @client.command(name = 'roll',
                 description = 'Will roll any number of dice - Write in #d# + ... format',
