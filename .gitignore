@@ -5,8 +5,8 @@ tokens.py
 # Created whenever python files run
 __pycache__
 
-# Making notes for future additions
-Notes.txt
+# Ignore any personal notes
+Notes
 
 # Don't sync any player data
 PlayerData

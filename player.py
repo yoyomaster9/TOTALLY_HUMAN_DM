@@ -1,4 +1,4 @@
-import DM
+import dm
 import random
 import json
 import os
@@ -14,33 +14,25 @@ class PlayerNotFoundError(Exception):
     pass
 
 class Player:
-    # def __init__(self, user, statmethod = 'standard', wallet = 0, **kwargs):
-    #     # author is discord ctx.user
-    #     self.playerID = user.id
-    #     self.playerName = user.name
-    #
-    #     if os.path.exists(PlayerDataDirectory + str(self.playerID)):
-    #         dir = PlayerDataDirectory + str(self.playerID)
-    #         with open(dir, 'r') as file:
-    #             dict = json.load(file)
-    #             self.__dict__.update(dict)
-    #     else:
-    #         self.__dict__.update(kwargs)
-    #         self.statmethod = statmethod
-    #         self.wallet = wallet
-    #         self.equipped = []
-    #         self.items = []
-    #         self.rollStats(self.statmethod)
-    #         self.save()
-
-    def __init__(self, user, **kwargs):
+    # Note: 'user' is the discord ctx.author class
+    def __init__(self, user, wallet = 0, statmethod = 'standard', **kwargs):
         self.playerID = user.id
         self.playerName = user.name
-
         dir = PlayerDataDirectory + str(self.playerID)
-        with open(dir, 'r') as file:
-            dict = json.load(file)
-            self.__dict__.update(dict)
+        if os.path.exists(dir):
+            with open(dir, 'r') as file:
+                dict = json.load(file)
+                self.__dict__.update(dict)
+        else:
+            self.wallet = wallet
+            self.statmethod = statmethod
+            self.xp = 0
+            self.equipped = []
+            self.items = []
+            self.proficiencies = []
+            self.proficiencyBonus = 2
+            self.rollStats()
+            self.save()
 
     def save(self):
         dir = PlayerDataDirectory + str(self.playerID)
@@ -48,18 +40,27 @@ class Player:
             data = vars(self)
             json.dump(data, file)
 
-    def rollStats(self, statmethod):
+    def rollStats(self):
         abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
-        if statmethod == 'standard':
+        if self.statmethod == 'standard':
             scores = [15, 14, 13, 12, 10, 8]
             random.shuffle(scores)
             self.baseStats = dict(zip(abilities, scores))
-        elif statmethod == 'random':
+        elif self.statmethod == 'random':
             self.baseStats = dict()
             for a in abilities:
                 rolls = [random.randint(1, 6) for x in range(4)]
                 rolls.sort()
                 self.baseStats[a] = sum(rolls[1:])
+
+    def printStats(self):
+        s = 'Stat - Score - Mod'
+        for x in ['str', 'dex', 'con', 'int', 'wis', 'cha']:
+            s +='\n {}:   {:2}    ({:+d})'.format(x.upper(), self.baseStats[x], eval('self.' + x + '()'))
+        s += '\nProficiency Bonus: +{}'.format(self.proficiencyBonus)
+        s += '\nProficiencies: {}'.format(', '.join(self.proficiencies))
+        s += '\nXP: {}'.format(self.xp)
+        return '```' + s + '```'
 
     # functions to determine stats based on items and base stats
     # returns the modifiers, not ability scores
@@ -93,3 +94,12 @@ class Player:
         for item in self.equipped:
             x += item.cha
         return x
+
+# Check if player exists in PlayerData folder
+def exists(playerID):
+    dir = PlayerDataDirectory + str(playerID)
+    return os.path.exists(dir)
+
+def remove(playerID):
+    dir = PlayerDataDirectory + str(playerID)
+    os.remove(dir)

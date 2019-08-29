@@ -2,7 +2,7 @@ import random, asyncio, aiohttp, json, sys, os
 import discord
 from discord.ext import commands
 import tokens
-import DM
+import dm
 import player
 
 abspath = os.path.abspath(__file__)
@@ -20,10 +20,12 @@ async def on_message(message):
         return
 
     # Check if player is registered
-    try:
-        player.Player(message.author):
-
-    await client.process_commands(message)
+    if message.content.startswith(BOT_PREFIX + 'register'):
+        await client.process_commands(message)
+    elif player.exists(message.author.id):
+        await client.process_commands(message)
+    else:
+        await message.channel.send('KRRT ERROR PLAYER NOT REGISTERED')
 
 @client.event
 async def on_command_error(ctx, error):
@@ -45,7 +47,7 @@ async def roll(ctx, msg):
         await ctx.send('BZZT YOU NEED TO SPECIFY THE ROLL!')
     else:
         try:
-            l = DM.roll(msg)
+            l = dm.roll(msg)
             msg = 'YOU ROLLED THE NUMBERS {Rolls}, YIELDING A SUM OF {Sum}!'.format(Rolls = l, Sum = sum(l))
             await ctx.send(msg)
         except:
@@ -53,25 +55,41 @@ async def roll(ctx, msg):
 
 @client.command()
 async def ping(ctx):
-    print(ctx)
-    print(ctx.author)
     p = player.Player(ctx.author)
-    print(p.__dict__)
+    await ctx.send('Pong!')
+    await ctx.send('Player found:\n```{}```'.format(p.__dict__))
+
+
+# Need to fix this command
+@client.command()
+async def register(ctx):
+    if player.exists(ctx.author.id):
+        await ctx.send('ERROR! YOU HAVE ALREADY REGISTERED! USE THIS COMMAND TO REMOVE YOUR CURRENT CHARACTER!\n```{}delcharacter```'.format(BOT_PREFIX))
+    elif not player.exists(ctx.author.id):
+        p = player.Player(ctx.author)
+        await ctx.send('PLAYER CREATED!')
+        await ctx.send(p.printStats())
+    else:
+        await ctx.send('COMMAND UNKNOWN! TRY AGAIN!')
 
 @client.command()
 async def stats(ctx):
     p = player.Player(ctx.author)
-    s = 'Stat - score - mod'
-    for x in ['str', 'dex', 'con', 'int', 'wis', 'cha']:
-        s = s + '\n {}:  {}  ({})'.format(x, p.baseStats[x], eval('p.' + x + '()'))
+    s = p.printStats()
     await ctx.send(s)
 
-@commands.has_permissions(administrator=True)
+
 @client.command(brief = 'Logs bot out of all servers [ADMIN ONLY]',
                 description = 'Logs bot out of all servers [ADMIN ONLY]')
 async def logout(ctx):
+    p = player.Player(ctx.author)
     await ctx.send('Goodbye!')
     await client.logout()
+
+@client.command()
+async def delcharacter(ctx):
+    player.remove(ctx.author.id)
+    await ctx.send('PLAYER REMOVED! CREATE NEW CHARACTER WITH ```{}register```'.format(BOT_PREFIX))
 
 @client.event
 async def on_ready():
