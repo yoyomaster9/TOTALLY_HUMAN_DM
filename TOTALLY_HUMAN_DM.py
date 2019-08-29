@@ -22,6 +22,8 @@ async def on_message(message):
     # Check if player is registered
     if message.content.startswith(BOT_PREFIX + 'register'):
         await client.process_commands(message)
+    elif message.content.startswith(BOT_PREFIX + 'roll'):
+        await client.process_commands(message)
     elif player.exists(message.author.id):
         await client.process_commands(message)
     else:
@@ -78,13 +80,15 @@ async def stats(ctx):
     s = p.printStats()
     await ctx.send(s)
 
-
 @client.command(brief = 'Logs bot out of all servers [ADMIN ONLY]',
                 description = 'Logs bot out of all servers [ADMIN ONLY]')
 async def logout(ctx):
     p = player.Player(ctx.author)
-    await ctx.send('Goodbye!')
-    await client.logout()
+    if p.playerID == 241703543017308162:
+        await ctx.send('GOODBYE!')
+        await client.logout()
+    else:
+        await ctx.send('CANNOT USE THIS COMMAND!')
 
 @client.command()
 async def delcharacter(ctx):
@@ -98,4 +102,4 @@ async def on_ready():
     print('---------------------')
 
 
-client.run(tokens.beta)
+client.run(tokens.release)
