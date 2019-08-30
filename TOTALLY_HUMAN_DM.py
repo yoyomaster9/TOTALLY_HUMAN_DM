@@ -24,10 +24,10 @@ async def on_message(message):
         await client.process_commands(message)
     elif message.content.startswith(BOT_PREFIX + 'roll'):
         await client.process_commands(message)
-    elif player.exists(message.author.id):
-        await client.process_commands(message)
-    else:
+    elif not playey.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
         await message.channel.send('KRRT ERROR PLAYER NOT REGISTERED')
+    elif player.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
+        await client.process_commands(message)
 
 @client.event
 async def on_command_error(ctx, error):
