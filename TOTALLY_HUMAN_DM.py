@@ -24,7 +24,7 @@ async def on_message(message):
         await client.process_commands(message)
     elif message.content.startswith(BOT_PREFIX + 'roll'):
         await client.process_commands(message)
-    elif not playey.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
+    elif not player.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
         await message.channel.send('KRRT ERROR PLAYER NOT REGISTERED')
     elif player.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
         await client.process_commands(message)
