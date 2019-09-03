@@ -44,7 +44,6 @@ async def on_command_error(ctx, error):
                 brief = 'Rolls any number of dice',
                 aliases = ['r'])
 async def roll(ctx, msg):
-    print(msg)
     if not msg:
         await ctx.send('BZZT YOU NEED TO SPECIFY THE ROLL!')
     else:
@@ -62,7 +61,6 @@ async def ping(ctx):
     await ctx.send('Player found:\n```{}```'.format(p.__dict__))
 
 
-# Need to fix this command
 @client.command()
 async def register(ctx):
     if player.exists(ctx.author.id):
