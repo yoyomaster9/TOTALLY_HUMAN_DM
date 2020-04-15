@@ -1,0 +1,20 @@
+skills = {
+    'athletics': 'STR',
+    'acrobatics': 'DEX',
+    'sleightofhand': 'DEX',
+    'stealth': 'DEX',
+    'arcana': 'INT',
+    'history': 'INT', 
+    'investigation': 'INT', 
+    'nature': 'INT',
+    'religion': 'INT',
+    'animalhandling': 'WIS',
+    'insight': 'WIS',
+    'medicine': 'WIS',
+    'perception': 'WIS',
+    'survival': 'WIS',
+    'deception': 'CHA',
+    'intimidation': 'CHA',
+    'performance': 'CHA',
+    'persuasion': 'CHA'
+}

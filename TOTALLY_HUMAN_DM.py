@@ -9,7 +9,7 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
-BOT_PREFIX = ('!')
+BOT_PREFIX = ('~')
 
 client = commands.Bot(command_prefix=BOT_PREFIX)
 
@@ -19,14 +19,15 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    # Check if player is registered
-    if message.content.startswith(BOT_PREFIX + 'register'):
-        await client.process_commands(message)
-    elif message.content.startswith(BOT_PREFIX + 'roll'):
-        await client.process_commands(message)
-    elif not player.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
-        await message.channel.send('KRRT ERROR PLAYER NOT REGISTERED')
-    elif player.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
+    # # Check if player is registered
+    # if message.content.startswith(BOT_PREFIX + 'register'):
+    #     await client.process_commands(message)
+    # elif message.content.startswith(BOT_PREFIX + 'roll'):
+    #     await client.process_commands(message)
+    # elif not player.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
+    #     await message.channel.send('KRRT ERROR PLAYER NOT REGISTERED')
+    # elif player.exists(message.author.id) and message.content.startswith(BOT_PREFIX):
+    else:
         await client.process_commands(message)
 
 @client.event

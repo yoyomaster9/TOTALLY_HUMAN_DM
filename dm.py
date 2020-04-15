@@ -1,5 +1,15 @@
 import random
 
+import json
+import os
+
+# Where user data is stored
+PlayerDataDirectory = 'PlayerData/'
+
+# Create folder if nonexistent
+if not os.path.exists(PlayerDataDirectory):
+    os.makedirs(PlayerDataDirectory)
+
 def roll(s): # Simulates rolls of the form #d#+#d#..
     l = []
     s = s.lower()
@@ -17,15 +27,6 @@ def roll(s): # Simulates rolls of the form #d#+#d#..
             l.append(int(i))
     return l
 
-import json
-import os
-
-# Where user data is stored
-PlayerDataDirectory = 'PlayerData/'
-
-# Create folder if nonexistent
-if not os.path.exists(PlayerDataDirectory):
-    os.makedirs(PlayerDataDirectory)
 
 class Player:
     def __init__(self, playerName, statmethod = 'standard', wallet = 0, equipment = {}, **kwargs):
@@ -94,4 +95,3 @@ def loadPlayer(nick):
             return Player(**dict)
     except FileNotFoundError:
         print('File Error!!')
-
