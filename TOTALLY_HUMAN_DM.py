@@ -4,9 +4,6 @@ from discord.ext import commands
 import tokens
 import dm
 
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
 
 BOT_PREFIX = ('~')
 
