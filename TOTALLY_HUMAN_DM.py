@@ -1,4 +1,3 @@
-import random, asyncio, aiohttp, json, sys, os
 import discord
 from discord.ext import commands
 import tokens

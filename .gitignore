@@ -10,3 +10,6 @@ Notes
 
 # Don't sync any player data
 PlayerData
+
+# don't sync venv
+venv
