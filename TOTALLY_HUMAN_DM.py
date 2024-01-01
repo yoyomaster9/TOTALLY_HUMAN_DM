@@ -3,6 +3,11 @@ import discord
 from discord.ext import commands
 import tokens
 import dm
+import os
+import sys
+
+# Set working directory
+os.chdir(sys.path[0])
 
 intents = discord.Intents.default()
 
