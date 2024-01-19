@@ -42,6 +42,9 @@ async def roll(ctx, *msg):
         return
     elif msg[0] == 'stats':
         msg[0] = '4d6kh3 + 4d6kh3 + 4d6kh3 + 4d6kh3 + 4d6kh3 + 4d6kh3'
+    elif msg[0] == 'grid':
+        await ctx.send(f'```{dm.Grid()}```')
+        return
     try:
         msg = ''.join(msg)
         msg = msg.lower().replace(' ', '')
