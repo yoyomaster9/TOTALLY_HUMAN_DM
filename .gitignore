@@ -11,5 +11,6 @@ Notes
 # Don't sync any player data
 PlayerData
 
-# don't sync venv
-venv
+# This shouldn't have ever been added
+*.ipynb
+.ipynb_checkpoints

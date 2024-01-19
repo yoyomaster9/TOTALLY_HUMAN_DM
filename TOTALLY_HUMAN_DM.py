@@ -2,11 +2,17 @@ import discord
 from discord.ext import commands
 import tokens
 import dm
+import os
+import sys
 
+# Set working directory
+os.chdir(sys.path[0])
+
+intents = discord.Intents.default()
 
 BOT_PREFIX = ('~')
 
-client = commands.Bot(command_prefix=BOT_PREFIX)
+client = commands.Bot(command_prefix=BOT_PREFIX, intents = intents)
 
 @client.event
 async def on_message(message):
@@ -16,6 +22,7 @@ async def on_message(message):
 
     else:
         await client.process_commands(message)
+
 
 @client.event
 async def on_command_error(ctx, error):
@@ -27,16 +34,29 @@ async def on_command_error(ctx, error):
                 help = '''Example: 2d6 + 1d4 + 3 will simulate 2 six-sided dice, 1 four-sided die, and add 3 at the end.''',
                 brief = 'Rolls any number of dice',
                 aliases = ['r'])
-async def roll(ctx, msg):
+async def roll(ctx, *msg):
+    msg = list(msg)
     if not msg:
         await ctx.send('BZZT YOU NEED TO SPECIFY THE ROLL!')
-    else:
-        try:
-            l = dm.roll(msg)
-            msg = 'YOU ROLLED THE NUMBERS {Rolls}, YIELDING A SUM OF {Sum}!'.format(Rolls = l, Sum = sum(l))
-            await ctx.send(msg)
-        except:
-            await ctx.send('I COULD NOT UNDERSTAND YOUR INPUT KRRT!!')
+        return
+    elif msg[0] == 'stats':
+        msg[0] = '4d6kh3 + 4d6kh3 + 4d6kh3 + 4d6kh3 + 4d6kh3 + 4d6kh3'
+    elif msg[0] == 'grid':
+        await ctx.send(f'```{dm.Grid()}```')
+        return
+    try:
+        msg = ''.join(msg)
+        msg = msg.lower().replace(' ', '')
+        l = [dm.Roll(s) for s in msg.split('+') if not s.isnumeric()]
+        mods = [int(s) for s in msg.split('+') if s.isnumeric()]
+        output = '\n'.join(str(x) for x in l)
+        if mods != []:
+            output += f'\nTotal mods: {sum(mods)}'
+        if len(l) > 1 or len(mods) > 0:
+            output += f'\nSum: `{sum(x.result for x in l) + sum(mods)}`'
+        await ctx.send(output)
+    except:
+        await ctx.send('I COULD NOT UNDERSTAND YOUR INPUT KRRT!!')
 
 @client.command()
 async def ping(ctx):
@@ -47,7 +67,7 @@ async def ping(ctx):
 async def logout(ctx):
     if ctx.author.id == 241703543017308162:
         await ctx.send('GOODBYE!')
-        await client.logout()
+        await client.close()
     else:
         await ctx.send('CANNOT USE THIS COMMAND!')
 
