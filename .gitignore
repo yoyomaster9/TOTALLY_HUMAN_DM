@@ -10,3 +10,7 @@ Notes
 
 # Don't sync any player data
 PlayerData
+
+# This shouldn't have ever been added
+*.ipynb
+.ipynb_checkpoints
